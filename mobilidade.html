@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobilidade | Meu IFA</title>
+    <meta
+      name="description"
+      content="Calculadora de física da mobilidade: deslocamento, velocidade, aceleração, força, energia e potência, com cenários pré-definidos e condições motoras."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/estilo.css" />
+    <link rel="stylesheet" href="css/mobilidade.css" />
+  </head>
+  <body>
+    <!-- ================= HEADER FIXO ================= -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="logo" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="3.2" />
+          </svg>
+          Meu IFA
+        </a>
+        <button class="btn-menu" type="button" aria-label="Abrir menu de navegação" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-principal" aria-label="Navegação principal">
+          <ul class="nav-list">
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= HERO ================= -->
+      <section class="hero hero-mobilidade">
+        <h1>A Física do Movimento Humano</h1>
+        <p>
+          Calcule deslocamento, velocidade, força, energia e potência e entenda o esforço real de
+          cada forma de se locomover
+        </p>
+        <button class="btn-cta" type="button" data-scroll="#calculadora">Abrir Calculadora</button>
+      </section>
+
+      <!-- ================= CALCULADORA DE FÍSICA ================= -->
+      <section class="calculadora" id="calculadora">
+        <div class="painel-calc">
+          <h2>Calculadora de Física da Mobilidade</h2>
+          <p class="sub">
+            Informe tempo, distância e massa. A calculadora retorna deslocamento, velocidade média,
+            aceleração, força, trabalho, energia cinética e potência.
+          </p>
+
+          <!-- Cenários pré-definidos -->
+          <h3 class="sr-only">Cenários pré-definidos</h3>
+          <div class="cenarios" id="cenarios"></div>
+
+          <!-- Campos de entrada -->
+          <form id="form-calc" novalidate>
+            <div class="grid-campos">
+              <div class="campo">
+                <label for="distancia">Distância (m)</label>
+                <input type="number" id="distancia" step="0.01" min="0" placeholder="Ex.: 100" />
+                <span class="erro" id="erro-distancia"></span>
+              </div>
+              <div class="campo">
+                <label for="tempo">Tempo (s)</label>
+                <input type="number" id="tempo" step="0.01" min="0" placeholder="Ex.: 20" />
+                <span class="erro" id="erro-tempo"></span>
+              </div>
+              <div class="campo">
+                <label for="massa">Massa (kg)</label>
+                <input type="number" id="massa" step="0.1" min="0" placeholder="Ex.: 70" />
+                <span class="erro" id="erro-massa"></span>
+              </div>
+              <div class="campo">
+                <label for="v-inicial">Velocidade inicial (m/s)</label>
+                <input type="number" id="v-inicial" step="0.01" value="0" placeholder="Ex.: 0" />
+                <span class="erro" id="erro-v-inicial"></span>
+              </div>
+            </div>
+
+            <div class="acoes-calc">
+              <button class="btn-calc" type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="18" rx="2.5" />
+                  <path d="M8 8h8M8 12h3M13 12h3M8 16h3M13 16h3" />
+                </svg>
+                Calcular
+              </button>
+              <button class="btn-calc limpar" type="button" id="btn-limpar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />
+                </svg>
+                Limpar
+              </button>
+            </div>
+          </form>
+
+          <!-- Resultados -->
+          <div class="resultados" id="resultados" aria-live="polite"></div>
+
+          <!-- Animação do móvel -->
+          <div class="pista" aria-hidden="true">
+            <div class="faixa"></div>
+            <div class="movel" id="movel"></div>
+          </div>
+
+          <!-- Gráfico comparativo -->
+          <div class="grafico">
+            <h3>Comparação de velocidade média (m/s)</h3>
+            <div class="grafico-barras" id="grafico-barras"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FÓRMULAS UTILIZADAS ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Fórmulas Utilizadas</h2>
+        <p class="secao-sub">Todas as grandezas seguem o Sistema Internacional de Unidades.</p>
+
+        <div class="tabela-formulas">
+          <table>
+            <caption class="sr-only">Fórmulas de cinemática e dinâmica usadas na calculadora</caption>
+            <thead>
+              <tr>
+                <th scope="col">Grandeza</th>
+                <th scope="col">Fórmula</th>
+                <th scope="col">Unidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Velocidade média</td><td><code>v = d / t</code></td><td>m/s</td></tr>
+              <tr><td>Aceleração média</td><td><code>a = (v - v0) / t</code></td><td>m/s²</td></tr>
+              <tr><td>Força resultante</td><td><code>F = m · a</code></td><td>N</td></tr>
+              <tr><td>Peso</td><td><code>P = m · g (g = 9,81)</code></td><td>N</td></tr>
+              <tr><td>Trabalho</td><td><code>W = F · d</code></td><td>J</td></tr>
+              <tr><td>Energia cinética</td><td><code>Ec = m · v² / 2</code></td><td>J</td></tr>
+              <tr><td>Potência</td><td><code>P = W / t</code></td><td>W</td></tr>
+              <tr><td>Quantidade de movimento</td><td><code>Q = m · v</code></td><td>kg·m/s</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= CONDIÇÕES DE MOBILIDADE ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Condições de Mobilidade</h2>
+        <p class="secao-sub">Como diferentes condições afetam o movimento e quais recursos ajudam.</p>
+
+        <div class="grid-condicoes">
+          <article class="card condicao reveal">
+            <!-- Cadeira de rodas -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <circle cx="21" cy="34" r="9" />
+              <path d="M21 12v14h11l5 8M18 8h6" />
+            </svg>
+            <h3>Paraplegia</h3>
+            <p>Perda de movimento dos membros inferiores por lesão medular torácica ou lombar.</p>
+            <ul>
+              <li>Cadeira de rodas manual ou motorizada</li>
+              <li>Fisioterapia e fortalecimento de tronco</li>
+              <li>Rampas e transporte acessível</li>
+            </ul>
+          </article>
+
+          <article class="card condicao reveal">
+            <!-- Prótese -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M20 6v14l-4 8 6 6 4 8" />
+              <path d="M28 10v10l6 6-4 8" />
+            </svg>
+            <h3>Amputação</h3>
+            <p>Perda parcial ou total de um membro, com adaptação por prótese e reabilitação.</p>
+            <ul>
+              <li>Próteses mecânicas ou biônicas</li>
+              <li>Treino de marcha</li>
+              <li>Acompanhamento psicológico</li>
+            </ul>
+          </article>
+
+          <article class="card condicao reveal">
+            <!-- Bengala / apoio -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M28 8a6 6 0 0 0-12 0v26" />
+              <path d="M16 34v6M32 40h-8" />
+            </svg>
+            <h3>Artrite e Artrose</h3>
+            <p>Dor e rigidez articular que reduzem amplitude de movimento e velocidade da marcha.</p>
+            <ul>
+              <li>Bengalas e andadores</li>
+              <li>Exercícios de baixo impacto</li>
+              <li>Controle de peso e medicação</li>
+            </ul>
+          </article>
+
+          <article class="card condicao reveal">
+            <!-- Cérebro / neurológico -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M18 12a8 8 0 0 0 0 16v10M30 12a8 8 0 0 1 0 16v10" />
+              <path d="M18 20h12" />
+            </svg>
+            <h3>Paralisia Cerebral</h3>
+            <p>Alterações no tônus e na coordenação motora causadas por lesão cerebral precoce.</p>
+            <ul>
+              <li>Órteses e adaptações posturais</li>
+              <li>Terapia ocupacional</li>
+              <li>Comunicação alternativa</li>
+            </ul>
+          </article>
+
+          <article class="card condicao reveal">
+            <!-- Tremor / Parkinson -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M8 24h6l4-10 6 20 5-14 4 8h7" />
+            </svg>
+            <h3>Doença de Parkinson</h3>
+            <p>Rigidez, tremor e lentidão dos movimentos, com passos curtos e risco de queda.</p>
+            <ul>
+              <li>Medicação dopaminérgica</li>
+              <li>Fisioterapia com pistas rítmicas</li>
+              <li>Ambientes livres de obstáculos</li>
+            </ul>
+          </article>
+
+          <article class="card condicao reveal">
+            <!-- Osso / fratura -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M14 34l20-20" />
+              <circle cx="11" cy="37" r="5" />
+              <circle cx="37" cy="11" r="5" />
+            </svg>
+            <h3>Osteoporose</h3>
+            <p>Redução da densidade óssea que aumenta muito o risco de fraturas por queda.</p>
+            <ul>
+              <li>Cálcio e vitamina D</li>
+              <li>Musculação orientada</li>
+              <li>Adaptações contra quedas em casa</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= DICAS E PREVENÇÃO ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Dicas e Prevenção</h2>
+        <p class="secao-sub">Hábitos que preservam articulações, músculos e equilíbrio.</p>
+
+        <div class="grid-dicas">
+          <article class="card dica reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M8 24h6M34 24h6" />
+              <rect x="14" y="18" width="20" height="12" rx="3" />
+            </svg>
+            <h3>Fortalecimento Muscular</h3>
+            <p>Músculos fortes protegem as articulações e reduzem o risco de queda em qualquer idade.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <circle cx="24" cy="10" r="5" />
+              <path d="M24 15v14l-7 12M24 29l7 12M14 22h20" />
+            </svg>
+            <h3>Alongamento Diário</h3>
+            <p>10 minutos de alongamento melhoram a amplitude de movimento e diminuem dores.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M10 38V22l14-10 14 10v16" />
+              <path d="M18 38V28h12v10" />
+            </svg>
+            <h3>Casa Segura</h3>
+            <p>Barras de apoio, tapetes fixos e boa iluminação evitam a maioria das quedas domésticas.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M24 8v8M24 32v8M8 24h8M32 24h8" />
+              <circle cx="24" cy="24" r="8" />
+            </svg>
+            <h3>Postura Consciente</h3>
+            <p>Ajuste cadeira e monitor, evite ficar sentado por mais de 1 hora seguida.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= ESTATÍSTICAS GLOBAIS ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Estatísticas Globais</h2>
+        <p class="secao-sub">Dados de referência da OMS e do Ministério da Saúde.</p>
+
+        <div class="grid-stats">
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <circle cx="24" cy="24" r="17" />
+              <path d="M7 24h34M24 7c5 5 5 29 0 34M24 7c-5 5-5 29 0 34" />
+            </svg>
+            <div class="numero" data-contador="1.3" data-decimais="1" data-sufixo=" bi">0</div>
+            <p>Pessoas com alguma deficiência no mundo</p>
+          </article>
+
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <circle cx="21" cy="34" r="9" />
+              <path d="M21 12v14h11l5 8M18 8h6" />
+            </svg>
+            <div class="numero" data-contador="80" data-decimais="0" data-sufixo=" mi">0</div>
+            <p>Pessoas que necessitam de cadeira de rodas</p>
+          </article>
+
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M24 6l14 5v12c0 9-6 15-14 19-8-4-14-10-14-19V11l14-5Z" />
+              <path d="M17 24l5 5 10-10" />
+            </svg>
+            <div class="numero" data-contador="37" data-decimais="0" data-sufixo=" mi">0</div>
+            <p>Quedas graves por ano que exigem atendimento</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div>
+          <h3>Sobre</h3>
+          <p>
+            O Meu IFA é um projeto informativo e educacional sobre visão, audição e
+            mobilidade. Nossa missão é ampliar a compreensão sobre deficiências e acessibilidade
+            através de simulações interativas.
+          </p>
+        </div>
+        <div>
+          <h3>Links Rápidos</h3>
+          <ul>
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Referências</h3>
+          <ul>
+            <li>OMS - Organização Mundial da Saúde</li>
+            <li>Ministério da Saúde</li>
+            <li>SBOT - Sociedade Brasileira de Ortopedia</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">&copy; 2024 Meu IFA - Projeto Informativo E. Soares. S</div>
+    </footer>
+
+    <button class="btn-topo" type="button" aria-label="Voltar ao topo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <script src="js/main.js"></script>
+    <script src="js/mobilidade.js"></script>
+  </body>
+</html>

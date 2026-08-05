@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audição | Meu IFA</title>
+    <meta
+      name="description"
+      content="Simule perda auditiva leve, moderada, severa, zumbido e presbiacusia com áudio em tempo real, veja audiogramas, escala de decibéis e prevenção."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/estilo.css" />
+    <link rel="stylesheet" href="css/audicao.css" />
+  </head>
+  <body>
+    <!-- ================= HEADER FIXO ================= -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="logo" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="3.2" />
+          </svg>
+          Meu IFA
+        </a>
+        <button class="btn-menu" type="button" aria-label="Abrir menu de navegação" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-principal" aria-label="Navegação principal">
+          <ul class="nav-list">
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= HERO ================= -->
+      <section class="hero hero-audicao">
+        <h1>Ouvindo o Mundo de Formas Diferentes</h1>
+        <p>
+          Escute simulações reais de perda auditiva e entenda como o som chega a cada pessoa de
+          maneira única
+        </p>
+        <button class="btn-cta" type="button" data-scroll="#simulador">Ouvir Simulações</button>
+      </section>
+
+      <!-- ================= SIMULADOR DE ÁUDIO ================= -->
+      <section class="simulador-audio" id="simulador" aria-labelledby="titulo-simulador">
+        <h2 id="titulo-simulador" class="sr-only">Simulador de condições auditivas</h2>
+
+        <div class="painel-audio">
+          <div class="campo-dropdown">
+            <label for="seletor-condicao">Selecione uma condição auditiva:</label>
+            <select id="seletor-condicao">
+              <option value="normal">Audição Normal (Referência)</option>
+              <option value="leve">Perda Auditiva Leve (26-40 dB)</option>
+              <option value="moderada">Perda Auditiva Moderada (41-60 dB)</option>
+              <option value="severa">Perda Auditiva Severa (61-80 dB)</option>
+              <option value="profunda">Perda Auditiva Profunda (81+ dB)</option>
+              <option value="presbiacusia">Presbiacusia (perda por idade)</option>
+              <option value="zumbido">Zumbido (Tinnitus)</option>
+              <option value="conducao">Perda Condutiva (som abafado)</option>
+            </select>
+          </div>
+
+          <div class="controles-audio">
+            <button class="btn-audio" type="button" id="btn-tocar">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5l12 7-12 7V5Z" />
+              </svg>
+              <span id="rotulo-tocar">Tocar simulação</span>
+            </button>
+            <button class="btn-audio secundario" type="button" id="btn-parar" disabled>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg>
+              <span>Parar</span>
+            </button>
+            <div class="campo-volume">
+              <label for="volume">Volume</label>
+              <input type="range" id="volume" min="0" max="100" value="55" />
+              <span id="valor-volume">55%</span>
+            </div>
+          </div>
+
+          <!-- Visualizador de onda em tempo real -->
+          <div class="moldura-onda">
+            <canvas id="onda" width="1000" height="180" aria-label="Visualização da onda sonora"></canvas>
+          </div>
+
+          <!-- Equalizador visual (barras CSS) -->
+          <div class="equalizador" id="equalizador" aria-hidden="true"></div>
+
+          <!-- Audiograma simplificado -->
+          <div class="audiograma" id="audiograma"></div>
+        </div>
+      </section>
+
+      <!-- ================= CARD INFORMATIVO ================= -->
+      <section class="info-condicao" aria-live="polite">
+        <div class="caixa">
+          <div class="info-topo">
+            <span class="info-icone" id="info-icone" aria-hidden="true"></span>
+            <div>
+              <h2 id="info-nome">Audição Normal</h2>
+              <span class="badge" id="info-badge">Referência</span>
+            </div>
+          </div>
+
+          <p id="info-descricao"></p>
+
+          <div class="info-listas">
+            <div>
+              <h3>Sintomas</h3>
+              <ul id="lista-sintomas"></ul>
+            </div>
+            <div>
+              <h3>Tratamentos</h3>
+              <ul id="lista-tratamentos"></ul>
+            </div>
+          </div>
+
+          <div class="grid-barras">
+            <div class="linha-barra">
+              <div class="rotulo"><span>Severidade</span><span id="valor-severidade">0/10</span></div>
+              <div class="trilha"><div class="preenchimento severidade" id="barra-severidade"></div></div>
+            </div>
+            <div class="linha-barra">
+              <div class="rotulo"><span>Prevalência na população</span><span id="valor-prevalencia">0%</span></div>
+              <div class="trilha"><div class="preenchimento prevalencia" id="barra-prevalencia"></div></div>
+            </div>
+            <div class="linha-barra">
+              <div class="rotulo"><span>Impacto na vida diária</span><span id="valor-impacto">0/10</span></div>
+              <div class="trilha"><div class="preenchimento impacto" id="barra-impacto"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ESCALA DE DECIBÉIS ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Escala de Decibéis</h2>
+        <p class="secao-sub">A partir de 85 dB por longos períodos, o dano auditivo é cumulativo.</p>
+
+        <div class="escala-db" id="escala-db"></div>
+
+        <p class="aviso">
+          Atenção: use volume moderado ao ouvir as simulações. Fones de ouvido acima de 85 dB por
+          mais de 8 horas podem causar perda auditiva permanente.
+        </p>
+      </section>
+
+      <!-- ================= DICAS E PREVENÇÃO ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Dicas e Prevenção</h2>
+        <p class="secao-sub">Cuidados diários que preservam sua audição.</p>
+
+        <div class="grid-dicas">
+          <article class="card dica reveal">
+            <!-- Fone de ouvido -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M10 28v-4a14 14 0 0 1 28 0v4" />
+              <rect x="6" y="28" width="8" height="12" rx="3" />
+              <rect x="34" y="28" width="8" height="12" rx="3" />
+            </svg>
+            <h3>Regra 60/60</h3>
+            <p>Use fones a no máximo 60% do volume por até 60 minutos seguidos, com pausas.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <!-- Protetor auricular -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M18 40c0-8-8-10-8-20a14 14 0 0 1 28 0c0 6-4 8-8 8s-6 3-6 6" />
+              <circle cx="24" cy="18" r="4" />
+            </svg>
+            <h3>Proteção em Ruído</h3>
+            <p>Use protetores auriculares em shows, obras e ambientes industriais acima de 85 dB.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <!-- Gota / higiene -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M24 6c6 9 10 13 10 19a10 10 0 0 1-20 0c0-6 4-10 10-19Z" />
+            </svg>
+            <h3>Higiene Correta</h3>
+            <p>Nunca use cotonetes dentro do canal auditivo: eles empurram a cera e podem perfurar.</p>
+          </article>
+
+          <article class="card dica reveal">
+            <!-- Estetoscópio / exame -->
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M14 8v10a10 10 0 0 0 20 0V8" />
+              <circle cx="24" cy="36" r="6" />
+            </svg>
+            <h3>Exames Periódicos</h3>
+            <p>Faça audiometria a cada 2 anos, ou anualmente se trabalhar exposto a ruído.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= ESTATÍSTICAS GLOBAIS ================= -->
+      <section class="secao">
+        <h2 class="secao-titulo">Estatísticas Globais</h2>
+        <p class="secao-sub">Dados de referência da Organização Mundial da Saúde.</p>
+
+        <div class="grid-stats">
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <circle cx="24" cy="24" r="17" />
+              <path d="M7 24h34M24 7c5 5 5 29 0 34M24 7c-5 5-5 29 0 34" />
+            </svg>
+            <div class="numero" data-contador="1.5" data-decimais="1" data-sufixo=" bi">0</div>
+            <p>Pessoas com algum grau de perda auditiva</p>
+          </article>
+
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M24 6l14 5v12c0 9-6 15-14 19-8-4-14-10-14-19V11l14-5Z" />
+              <path d="M17 24l5 5 10-10" />
+            </svg>
+            <div class="numero" data-contador="60" data-decimais="0" data-sufixo="%">0</div>
+            <p>Dos casos em crianças são evitáveis</p>
+          </article>
+
+          <article class="card stat reveal">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M10 28v-4a14 14 0 0 1 28 0v4" />
+              <rect x="6" y="28" width="8" height="12" rx="3" />
+              <rect x="34" y="28" width="8" height="12" rx="3" />
+            </svg>
+            <div class="numero" data-contador="1.1" data-decimais="1" data-sufixo=" bi">0</div>
+            <p>Jovens em risco por música alta</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div>
+          <h3>Sobre</h3>
+          <p>
+            O Meu IFA é um projeto informativo e educacional sobre visão, audição e
+            mobilidade. Nossa missão é ampliar a compreensão sobre deficiências e acessibilidade
+            através de simulações interativas.
+          </p>
+        </div>
+        <div>
+          <h3>Links Rápidos</h3>
+          <ul>
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Referências</h3>
+          <ul>
+            <li>OMS - Organização Mundial da Saúde</li>
+            <li>Ministério da Saúde</li>
+            <li>SBOT - Sociedade Brasileira de Ortopedia</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">&copy; 2024 Meu IFA - Projeto Informativo E. Soares. S</div>
+    </footer>
+
+    <button class="btn-topo" type="button" aria-label="Voltar ao topo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <script src="js/main.js"></script>
+    <script src="js/audicao.js"></script>
+  </body>
+</html>

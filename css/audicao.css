@@ -1,0 +1,403 @@
+/* ============================================================
+   audicao.css - Estilos exclusivos da pÃ¡gina de AudiÃ§Ã£o
+   ============================================================ */
+
+   .hero-audicao {
+    background: linear-gradient(135deg, #1a1a2e, #2c1a3e 55%, #4a1942);
+  }
+  
+  /* ---------- Simulador ---------- */
+  .simulador-audio {
+    max-width: 1100px;
+    margin: -60px auto 0;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 5;
+  }
+  
+  .painel-audio {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: var(--sombra-forte);
+    padding: 30px;
+  }
+  
+  .campo-dropdown {
+    margin-bottom: 26px;
+  }
+  
+  .campo-dropdown label {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  
+  .campo-dropdown select {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--texto);
+    background: #fff;
+    border: 2px solid #dfe4ea;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.25s ease;
+  }
+  
+  .campo-dropdown select:focus-visible {
+    outline: none;
+    border-color: var(--roxo);
+  }
+  
+  /* ---------- Controles de reproduÃ§Ã£o ---------- */
+  .controles-audio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+  
+  .btn-audio {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 24px;
+    border: none;
+    border-radius: 30px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: #fff;
+    background: var(--roxo);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+  
+  .btn-audio.secundario {
+    background: #34495e;
+  }
+  
+  .btn-audio:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(155, 89, 182, 0.35);
+  }
+  
+  .btn-audio[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .btn-audio svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .campo-volume {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 220px;
+  }
+  
+  .campo-volume input[type="range"] {
+    flex: 1;
+    accent-color: var(--roxo);
+  }
+  
+  /* ---------- Visualizador de ondas (canvas) ---------- */
+  .moldura-onda {
+    margin-top: 26px;
+    background: #12121f;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  
+  .moldura-onda canvas {
+    width: 100%;
+    height: 180px;
+    display: block;
+  }
+  
+  /* ---------- Equalizador visual (barras CSS) ---------- */
+  .equalizador {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 90px;
+    margin-top: 22px;
+  }
+  
+  .equalizador .barra-eq {
+    flex: 1;
+    background: linear-gradient(180deg, var(--roxo), var(--primaria));
+    border-radius: 4px 4px 0 0;
+    height: 8%;
+    transition: height 0.18s ease;
+  }
+  
+  /* ---------- Audiograma (frequÃªncias) ---------- */
+  .audiograma {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px;
+    margin-top: 30px;
+  }
+  
+  .freq-card {
+    background: #f8f9fc;
+    border: 1px solid #e6e9f2;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  
+  .freq-card strong {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+  }
+  
+  .freq-card small {
+    color: var(--texto-2);
+  }
+  
+  .freq-trilha {
+    height: 8px;
+    background: #e1e5ee;
+    border-radius: 6px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  
+  .freq-preenchimento {
+    height: 100%;
+    width: 0;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--secundaria), var(--destaque));
+    transition: width 0.9s ease;
+  }
+  
+  /* ---------- Card informativo ---------- */
+  .info-condicao {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+  
+  .info-condicao .caixa {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: var(--sombra);
+    padding: 30px;
+    border-left: 6px solid var(--roxo);
+  }
+  
+  .info-topo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  
+  .info-icone svg {
+    width: 44px;
+    height: 44px;
+    color: var(--roxo);
+  }
+  
+  .info-listas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+    margin-top: 22px;
+  }
+  
+  .info-listas h3 {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+  
+  .info-listas ul {
+    list-style: none;
+  }
+  
+  .info-listas li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+  }
+  
+  .info-listas li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0.65em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--roxo);
+  }
+  
+  .grid-barras {
+    margin-top: 26px;
+    display: grid;
+    gap: 16px;
+  }
+  
+  .linha-barra .rotulo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+  
+  .linha-barra .trilha {
+    height: 10px;
+    background: #e6e9f2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .linha-barra .preenchimento {
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    transition: width 1s ease;
+  }
+  
+  .preenchimento.severidade {
+    background: linear-gradient(90deg, #f39c12, var(--vermelho));
+  }
+  
+  .preenchimento.prevalencia {
+    background: linear-gradient(90deg, var(--primaria), var(--roxo));
+  }
+  
+  .preenchimento.impacto {
+    background: linear-gradient(90deg, var(--secundaria), var(--primaria));
+  }
+  
+  /* ---------- Grids de conteÃºdo ---------- */
+  .grid-dicas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  
+  .card.dica svg {
+    width: 44px;
+    height: 44px;
+    color: var(--roxo);
+    margin-bottom: 14px;
+  }
+  
+  .card.dica h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  
+  .grid-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .card.stat svg {
+    width: 42px;
+    height: 42px;
+    color: var(--roxo);
+    margin: 0 auto 12px;
+  }
+  
+  .card.stat .numero {
+    font-family: "Poppins", sans-serif;
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: var(--roxo);
+  }
+  
+  /* ---------- Escala de decibÃ©is ---------- */
+  .escala-db {
+    display: grid;
+    gap: 10px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .item-db {
+    display: grid;
+    grid-template-columns: 120px 1fr 70px;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: var(--sombra);
+  }
+  
+  .item-db .trilha-db {
+    height: 12px;
+    background: #e6e9f2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .item-db .fill-db {
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    transition: width 1.2s ease;
+  }
+  
+  .fill-db.seguro {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+  }
+  
+  .fill-db.atencao {
+    background: linear-gradient(90deg, #f1c40f, #e67e22);
+  }
+  
+  .fill-db.perigo {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+  }
+  
+  .item-db strong {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  
+  .item-db span {
+    text-align: right;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+  }
+  
+  .aviso {
+    max-width: 900px;
+    margin: 26px auto 0;
+    background: #fff6e5;
+    border-left: 5px solid var(--destaque);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #7a4d05;
+    font-size: 0.95rem;
+  }
+  
+  @media (max-width: 720px) {
+    .info-listas {
+      grid-template-columns: 1fr;
+    }
+    .item-db {
+      grid-template-columns: 90px 1fr 60px;
+      font-size: 0.9rem;
+    }
+    .simulador-audio {
+      margin-top: -30px;
+    }
+  }

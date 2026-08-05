@@ -1,0 +1,427 @@
+/* ============================================================
+   estilo.css - Estilos globais compartilhados
+   Sentidos Humanos - Projeto informativo
+   ============================================================ */
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- Variáveis / Paleta global ---------- */
+:root {
+  --primaria: #4a90d9;
+  --secundaria: #2ecc71;
+  --destaque: #e67e22;
+  --roxo: #9b59b6;
+  --vermelho: #e74c3c;
+  --bg: #f5f6fa;
+  --texto: #2c3e50;
+  --texto-2: #7f8c8d;
+  --card: #ffffff;
+  --sombra: 0 5px 20px rgba(0, 0, 0, 0.08);
+  --sombra-forte: 0 15px 50px rgba(0, 0, 0, 0.1);
+  --grad-header: linear-gradient(135deg, #1a1a2e, #16213e);
+  --grad-footer: linear-gradient(180deg, #1a1a2e, #0d0d1a);
+  --header-h: 70px;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--texto);
+  background-color: var(--bg);
+  padding-top: var(--header-h); /* compensa o header fixo */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Poppins", system-ui, sans-serif;
+  line-height: 1.25;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ---------- HEADER FIXO ---------- */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-h);
+  z-index: 1000;
+  background: var(--grad-header);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+.header-inner {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo svg {
+  width: 26px;
+  height: 26px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-list a {
+  display: inline-block;
+  color: #e0e0e0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-list a:hover,
+.nav-list a:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  outline: none;
+}
+
+.nav-list a.ativo {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-bottom: 3px solid var(--primaria);
+}
+
+/* Botão hamburguer (mobile) */
+.btn-menu {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.btn-menu span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin: 5px 0;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-menu.aberto span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.btn-menu.aberto span:nth-child(2) {
+  opacity: 0;
+}
+.btn-menu.aberto span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---------- HERO genérico ---------- */
+.hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 70px 20px;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  max-width: 900px;
+}
+
+.hero p {
+  margin-top: 18px;
+  max-width: 700px;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-cta {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--destaque);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 34px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-cta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+}
+
+/* ---------- Layout de seções ---------- */
+.secao {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.secao-titulo {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--texto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.secao-sub {
+  text-align: center;
+  color: var(--texto-2);
+  margin: 12px auto 40px;
+  max-width: 640px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 15px;
+  box-shadow: var(--sombra);
+  padding: 26px;
+}
+
+/* Reveal via Intersection Observer */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visivel {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- FOOTER GLOBAL ---------- */
+.site-footer {
+  background: var(--grad-footer);
+  color: #e0e0e0;
+  padding: 60px 20px;
+  margin-top: 40px;
+}
+
+.footer-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-grid h3 {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.footer-grid p,
+.footer-grid li {
+  font-size: 0.92rem;
+  color: #bdc3c7;
+}
+
+.footer-grid ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.footer-grid a {
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-grid a:hover {
+  color: var(--primaria);
+}
+
+.footer-base {
+  max-width: 1100px;
+  margin: 40px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 0.85rem;
+  color: #95a5a6;
+}
+
+/* ---------- Botão voltar ao topo ---------- */
+.btn-topo {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: #1abc9c;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 900;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-topo.mostrar {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.btn-topo:hover {
+  transform: scale(1.1);
+}
+
+.btn-topo svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------- Utilidades ---------- */
+.badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--primaria);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 768px) {
+  .btn-menu {
+    display: block;
+  }
+
+  .nav-principal {
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: #16213e;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .nav-principal.aberto {
+    max-height: 260px;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 16px 18px;
+  }
+
+  .nav-list a {
+    display: block;
+    border-radius: 12px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .site-footer {
+    padding: 40px 20px;
+  }
+
+  .secao {
+    padding: 44px 16px;
+  }
+}
