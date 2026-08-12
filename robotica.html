@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robótica Assistiva | Meu IFA</title>
+    <meta
+      name="description"
+      content="Inovações em robótica assistiva, próteses biónicas, exoesqueletos e robôs de assistência para reabilitação e acessibilidade."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/estilo.css" />
+    <link rel="stylesheet" href="css/robotica.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="logo" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="3.2" />
+          </svg>
+          Meu IFA
+        </a>
+        <button class="btn-menu" type="button" aria-label="Abrir menu de navegação" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-principal" aria-label="Navegação principal">
+          <ul class="nav-list">
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+            <li><a href="robotica.html" class="active">Robótica</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero hero-robotica">
+        <div class="hero-tag">Tecnologia Avançada</div>
+        <h1>Robótica Assistiva & Autonomia</h1>
+        <p>
+          Explora como a robótica de ponta, inteligência artificial e interfaces biónicas estão a transformar a reabilitação e a proporcionar independência a milhões de pessoas.
+        </p>
+        <button class="btn-cta" type="button" data-scroll="#carrossel-secao">
+          Explorar Inovações
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+        </button>
+      </section>
+
+      <section class="secao" id="carrossel-secao">
+        <h2 class="secao-titulo">Inovações Tecnológicas</h2>
+        <p class="secao-sub">Desliza para explorar os pilares da tecnologia robótica aplicada à acessibilidade.</p>
+
+        <div class="carousel-wrapper">
+          <button class="carousel-btn btn-prev" id="btn-prev" aria-label="Anterior">&#10094;</button>
+
+          <div class="carousel-container" id="carousel">
+            <div class="carousel-card active">
+              <div class="card-icon-bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zM9 7a3 3 0 0 1 6 0v3H9V7z"/>
+                </svg>
+              </div>
+              <div class="badge">Biónica</div>
+              <h3>Próteses de Última Geração</h3>
+              <p>Membros robóticos articulados controlados por impulsos mi elétricos e inteligência artificial preditiva.</p>
+              <div class="card-tech-info">
+                <span>⚡ Sensores Mioelétricos</span>
+                <span>🧠 IA Preditiva</span>
+              </div>
+            </div>
+
+            <div class="carousel-card">
+              <div class="card-icon-bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <div class="badge">Reabilitação</div>
+              <h3>Exoesqueletos Motores</h3>
+              <p>Estruturas robóticas externas que auxiliam pessoas com paraplegia a caminhar e reabilitar a locomoção.</p>
+              <div class="card-tech-info">
+                <span>⚙️ Servo Motores</span>
+                <span>🔋 Bateria 8h</span>
+              </div>
+            </div>
+
+            <div class="carousel-card">
+              <div class="card-icon-bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </div>
+              <div class="badge">Assistência</div>
+              <h3>Robôs de Cuidado Domiciliar</h3>
+              <p>Assistentes autónomos para apoio diário a idosos e pessoas com mobilidade reduzida.</p>
+              <div class="card-tech-info">
+                <span>🌐 Visão Computacional</span>
+                <span>💬 Navegação LiDAR</span>
+              </div>
+            </div>
+
+            <div class="carousel-card">
+              <div class="card-icon-bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </div>
+              <div class="badge">Neural</div>
+              <h3>Interface Cérebro-Máquina</h3>
+              <p>Comando de dispositivos robóticos diretamente através de impulsos neuronais e leitura EEG.</p>
+              <div class="card-tech-info">
+                <span>🧠 Leitura EEG</span>
+                <span>🎯 Precisão Neural</span>
+              </div>
+            </div>
+
+            <div class="carousel-card">
+              <div class="card-icon-bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/>
+                </svg>
+              </div>
+              <div class="badge">Navegação</div>
+              <h3>Guia Robótico para Invisuais</h3>
+              <p>Dispositivos de navegação com feedback hápitco e ultrassónico para deteção de obstáculos em tempo real.</p>
+              <div class="card-tech-info">
+                <span>📡 Ultrassom</span>
+                <span>📳 Feedback Háptico</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="carousel-btn btn-next" id="btn-next" aria-label="Próximo">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </section>
+
+      <section class="secao grid-features">
+        <div class="feature-card">
+          <div class="f-icon">🤖</div>
+          <h3>Autonomia Adaptativa</h3>
+          <p>Sistemas que aprendem o padrão de movimento do utilizador para proporcionar uma resposta natural.</p>
+        </div>
+        <div class="feature-card">
+          <div class="f-icon">💡</div>
+          <h3>Feedback Háptico</h3>
+          <p>Sensores que transmitem sensações de tato e pressão para o sistema nervoso do utilizador.</p>
+        </div>
+        <div class="feature-card">
+          <div class="f-icon">🛡️</div>
+          <h3>Segurança Ativa</h3>
+          <p>Algoritmos de prevenção de quedas e travagem de emergência integrados.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div>
+          <h3>Sobre</h3>
+          <p>
+            O Meu IFA é um projeto informativo e educacional sobre visão, audição,
+            mobilidade e robótica. Nossa missão é ampliar a compreensão sobre tecnologia assistiva.
+          </p>
+        </div>
+        <div>
+          <h3>Links Rápidos</h3>
+          <ul>
+            <li><a href="visao.html">Visão</a></li>
+            <li><a href="audicao.html">Audição</a></li>
+            <li><a href="mobilidade.html">Mobilidade</a></li>
+            <li><a href="robotica.html">Robótica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Referências</h3>
+          <ul>
+            <li>OMS - Organização Mundial da Saúde</li>
+            <li>IEEE Robotics & Automation Society</li>
+            <li>Ministério da Saúde</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">&copy; 2024 Meu IFA - Projeto Informativo E. Soares. S</div>
+    </footer>
+
+    <button class="btn-topo" type="button" aria-label="Voltar ao topo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <script src="js/robotica.js"></script>
+  </body>
+</html>
