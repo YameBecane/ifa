@@ -1,5 +1,6 @@
 // =============================================
 // MENU FLUTUANTE DE ACESSIBILIDADE - VERSÃO GLOBAL
+// ARQUIVO: js/floating.js
 // =============================================
 
 (function() {
@@ -7,17 +8,31 @@
 
     // ========== CONFIGURAÇÕES ==========
     const CONFIG = {
-        position: 'bottom-left', // bottom-left, bottom-right, top-left, top-right
-        icon: '⚙️',
-        menuTitle: 'Acessibilidade',
-        autoClose: true, // Fecha o menu após clicar em uma ação
-        savePreferences: true, // Salva as preferências no localStorage
+        position: 'bottom-left',     // bottom-left, bottom-right, top-left, top-right
+        icon: '⚙️',                  // Ícone do botão
+        menuTitle: 'Acessibilidade', // Título do menu
+        autoClose: true,             // Fecha o menu após clicar em uma ação
+        savePreferences: true,       // Salva as preferências no localStorage
+        debug: false,                // Ativa logs de debug
     };
+
+    // ========== LOG DE DEBUG ==========
+    function log(message, data) {
+        if (CONFIG.debug) {
+            console.log(`[Floating Menu] ${message}`, data || '');
+        }
+    }
 
     // ========== ESTILOS DINÂMICOS ==========
     function injectStyles() {
+        log('Injetando estilos...');
+        
         const styles = `
-            /* RESET E LAYOUT GLOBAL */
+            /* ============================================
+               MENU FLUTUANTE - ESTILOS GLOBAIS
+               ============================================ */
+
+            /* CONTAINER PRINCIPAL */
             .floating-menu-global {
                 position: fixed;
                 z-index: 9999;
@@ -25,7 +40,8 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
-                font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                animation: floatingMenuSlideUp 0.3s ease-out;
             }
 
             /* POSIÇÕES */
@@ -55,26 +71,29 @@
                 border: none;
                 width: 58px;
                 height: 58px;
-                border-radius: 40px;
+                border-radius: 50%;
                 font-size: 28px;
                 cursor: pointer;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: 0.2s ease;
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border: 2px solid rgba(255, 255, 255, 0.1);
                 position: relative;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
             }
 
             .menu-toggle-global:hover {
                 background: #0f172a;
-                transform: scale(1.03);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05);
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+                border-color: rgba(255, 255, 255, 0.2);
             }
 
             .menu-toggle-global:active {
-                transform: scale(0.94);
+                transform: scale(0.92);
             }
 
             .menu-toggle-global .badge {
@@ -84,33 +103,43 @@
                 background: #3b82f6;
                 color: white;
                 border-radius: 50%;
-                width: 20px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
                 font-size: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-weight: bold;
+                box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+                transition: all 0.3s ease;
+            }
+
+            .menu-toggle-global .badge.active {
+                background: #8b5cf6;
+                animation: badgePulse 1.5s ease-in-out infinite;
             }
 
             /* CONTAINER DOS BOTÕES */
             .menu-actions-global {
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
-                background: rgba(255, 255, 255, 0.92);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                padding: 14px 12px;
-                border-radius: 24px;
-                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                min-width: 180px;
-                transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                gap: 6px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                padding: 12px 10px;
+                border-radius: 20px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                min-width: 190px;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                 transform-origin: bottom left;
                 opacity: 0;
                 pointer-events: none;
-                transform: scale(0.9) translateY(12px);
+                transform: scale(0.85) translateY(16px);
+                max-height: 0;
+                overflow: hidden;
+                padding: 0 10px;
             }
 
             .floating-menu-global.bottom-right .menu-actions-global {
@@ -127,14 +156,17 @@
                 opacity: 1;
                 pointer-events: auto;
                 transform: scale(1) translateY(0);
+                max-height: 500px;
+                padding: 12px 10px;
+                overflow: visible;
             }
 
             /* TÍTULO DO MENU */
             .menu-title-global {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: #64748b;
+                letter-spacing: 0.08em;
+                color: #94a3b8;
                 padding: 4px 8px 8px 8px;
                 border-bottom: 1px solid rgba(0, 0, 0, 0.06);
                 margin-bottom: 4px;
@@ -145,26 +177,28 @@
             .action-btn-global {
                 background: transparent;
                 border: none;
-                padding: 10px 14px;
-                border-radius: 60px;
-                font-size: 0.95rem;
+                padding: 9px 12px;
+                border-radius: 12px;
+                font-size: 0.9rem;
                 font-weight: 500;
                 text-align: left;
                 display: flex;
                 align-items: center;
                 gap: 12px;
                 color: #0f172a;
-                transition: 0.15s;
+                transition: all 0.15s ease;
                 cursor: pointer;
                 width: 100%;
                 letter-spacing: -0.01em;
                 border: 1px solid transparent;
                 font-family: inherit;
+                position: relative;
             }
 
             .action-btn-global:hover {
-                background: rgba(30, 41, 59, 0.07);
+                background: rgba(30, 41, 59, 0.06);
                 border-color: rgba(30, 41, 59, 0.08);
+                transform: translateX(2px);
             }
 
             .action-btn-global:active {
@@ -173,27 +207,48 @@
             }
 
             .action-btn-global .icon {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 width: 24px;
                 text-align: center;
+                flex-shrink: 0;
             }
 
             .action-btn-global .label {
                 flex: 1;
+                font-size: 0.9rem;
             }
 
             .action-btn-global .shortcut {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
                 color: #94a3b8;
                 background: #f1f5f9;
                 padding: 2px 8px;
-                border-radius: 12px;
+                border-radius: 10px;
+                font-weight: 600;
+                letter-spacing: 0.02em;
             }
 
             .divider-global {
                 height: 1px;
                 background: rgba(0, 0, 0, 0.06);
                 margin: 4px 0 6px;
+            }
+
+            /* ===== ANIMAÇÕES ===== */
+            @keyframes floatingMenuSlideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            @keyframes badgePulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
             }
 
             /* ===== MODO ALTO CONTRASTE ===== */
@@ -218,18 +273,21 @@
             body.high-contrast-global h1,
             body.high-contrast-global h2,
             body.high-contrast-global h3,
-            body.high-contrast-global h4 {
+            body.high-contrast-global h4,
+            body.high-contrast-global h5,
+            body.high-contrast-global h6 {
                 color: #f0f6ff !important;
             }
 
             body.high-contrast-global p,
             body.high-contrast-global li,
-            body.high-contrast-global span {
+            body.high-contrast-global span:not(.badge):not(.shortcut):not(.icon) {
                 color: #d0d9e8 !important;
             }
 
             body.high-contrast-global a {
                 color: #8bb3ff !important;
+                text-decoration-color: #8bb3ff !important;
             }
 
             body.high-contrast-global .menu-toggle-global {
@@ -238,8 +296,12 @@
                 border-color: #9aaec9 !important;
             }
 
+            body.high-contrast-global .menu-toggle-global:hover {
+                background: #ffffff !important;
+            }
+
             body.high-contrast-global .menu-actions-global {
-                background: rgba(22, 27, 34, 0.95) !important;
+                background: rgba(22, 27, 34, 0.96) !important;
                 border-color: #3d4b5e !important;
             }
 
@@ -250,6 +312,10 @@
             body.high-contrast-global .action-btn-global:hover {
                 background: rgba(255, 255, 255, 0.08) !important;
                 border-color: rgba(255, 255, 255, 0.15) !important;
+            }
+
+            body.high-contrast-global .action-btn-global:active {
+                background: rgba(255, 255, 255, 0.15) !important;
             }
 
             body.high-contrast-global .divider-global {
@@ -272,20 +338,27 @@
             }
 
             body.font-large-global h1 {
-                font-size: 2.4rem !important;
+                font-size: 2.6rem !important;
             }
             body.font-large-global h2 {
-                font-size: 2rem !important;
+                font-size: 2.2rem !important;
+            }
+            body.font-large-global h3 {
+                font-size: 1.8rem !important;
             }
             body.font-large-global p {
                 font-size: 1.2rem !important;
+                line-height: 1.7 !important;
             }
             body.font-large-global .action-btn-global {
                 font-size: 1.05rem !important;
             }
+            body.font-large-global .action-btn-global .label {
+                font-size: 1.05rem !important;
+            }
 
             body.font-small-global {
-                font-size: 0.85rem !important;
+                font-size: 0.82rem !important;
             }
 
             body.font-small-global h1 {
@@ -294,105 +367,167 @@
             body.font-small-global h2 {
                 font-size: 1.3rem !important;
             }
+            body.font-small-global h3 {
+                font-size: 1.1rem !important;
+            }
             body.font-small-global p {
-                font-size: 0.85rem !important;
+                font-size: 0.82rem !important;
+                line-height: 1.5 !important;
             }
             body.font-small-global .action-btn-global {
-                font-size: 0.8rem !important;
+                font-size: 0.78rem !important;
+            }
+            body.font-small-global .action-btn-global .label {
+                font-size: 0.78rem !important;
             }
 
             /* ===== RESPONSIVO ===== */
-            @media (max-width: 480px) {
+            @media (max-width: 768px) {
                 .floating-menu-global {
-                    bottom: 18px !important;
-                    left: 18px !important;
+                    bottom: 20px !important;
+                    left: 20px !important;
                     right: auto !important;
                     top: auto !important;
                 }
                 .menu-toggle-global {
-                    width: 52px !important;
-                    height: 52px !important;
+                    width: 54px !important;
+                    height: 54px !important;
                     font-size: 24px !important;
                 }
                 .menu-actions-global {
-                    min-width: 160px !important;
-                    padding: 12px 10px !important;
+                    min-width: 170px !important;
+                    padding: 10px 8px !important;
+                }
+                .menu-actions-global.open {
+                    padding: 10px 8px !important;
                 }
                 .action-btn-global {
                     font-size: 0.85rem !important;
-                    padding: 8px 12px !important;
+                    padding: 8px 10px !important;
+                }
+                .action-btn-global .label {
+                    font-size: 0.85rem !important;
                 }
                 .action-btn-global .shortcut {
                     display: none !important;
                 }
             }
 
-            /* ===== ANIMAÇÃO DE ENTRADA ===== */
-            @keyframes slideUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px) scale(0.95);
+            @media (max-width: 480px) {
+                .floating-menu-global {
+                    bottom: 16px !important;
+                    left: 16px !important;
                 }
-                to {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
+                .menu-toggle-global {
+                    width: 48px !important;
+                    height: 48px !important;
+                    font-size: 20px !important;
+                }
+                .menu-toggle-global .badge {
+                    width: 18px !important;
+                    height: 18px !important;
+                    font-size: 8px !important;
+                    top: -2px !important;
+                    right: -2px !important;
+                }
+                .menu-actions-global {
+                    min-width: 150px !important;
+                    padding: 8px 6px !important;
+                    border-radius: 16px !important;
+                }
+                .menu-actions-global.open {
+                    padding: 8px 6px !important;
+                }
+                .action-btn-global {
+                    font-size: 0.8rem !important;
+                    padding: 6px 8px !important;
+                    gap: 8px !important;
+                    border-radius: 10px !important;
+                }
+                .action-btn-global .label {
+                    font-size: 0.8rem !important;
+                }
+                .action-btn-global .icon {
+                    font-size: 0.95rem !important;
+                    width: 20px !important;
+                }
+                .menu-title-global {
+                    font-size: 0.6rem !important;
+                    padding: 2px 6px 6px 6px !important;
                 }
             }
 
-            .floating-menu-global {
-                animation: slideUp 0.3s ease-out;
+            /* ===== SCROLLBAR PERSONALIZADA (opcional) ===== */
+            .menu-actions-global::-webkit-scrollbar {
+                width: 4px;
+            }
+            .menu-actions-global::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .menu-actions-global::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
             }
         `;
 
         const styleSheet = document.createElement('style');
         styleSheet.textContent = styles;
+        styleSheet.id = 'floating-menu-styles';
         document.head.appendChild(styleSheet);
+        
+        log('Estilos injetados com sucesso');
     }
 
     // ========== CRIA O MENU ==========
     function createMenu() {
         // Verifica se já existe
         if (document.querySelector('.floating-menu-global')) {
+            log('Menu já existe, abortando criação');
             return;
         }
 
+        log('Criando menu...');
+
         const menuHTML = `
-            <div class="floating-menu-global ${CONFIG.position}">
-                <button class="menu-toggle-global" id="menuToggleGlobal" aria-label="Menu de acessibilidade">
+            <div class="floating-menu-global ${CONFIG.position}" role="navigation" aria-label="Menu de acessibilidade">
+                <button class="menu-toggle-global" id="menuToggleGlobal" 
+                        aria-label="Menu de acessibilidade" 
+                        aria-expanded="false"
+                        title="Menu de acessibilidade (Ctrl+Shift+A)">
                     ${CONFIG.icon}
-                    <span class="badge" id="menuBadge">✨</span>
+                    <span class="badge" id="menuBadge" aria-hidden="true">✨</span>
                 </button>
-                <div class="menu-actions-global" id="menuActionsGlobal">
-                    <div class="menu-title-global">${CONFIG.menuTitle}</div>
+                <div class="menu-actions-global" id="menuActionsGlobal" role="menu">
+                    <div class="menu-title-global" aria-hidden="true">${CONFIG.menuTitle}</div>
                     
-                    <button class="action-btn-global" data-action="increase-font">
-                        <span class="icon">🔍+</span>
+                    <button class="action-btn-global" data-action="increase-font" role="menuitem">
+                        <span class="icon" aria-hidden="true">🔍+</span>
                         <span class="label">Aumentar fonte</span>
                         <span class="shortcut">A</span>
                     </button>
                     
-                    <button class="action-btn-global" data-action="decrease-font">
-                        <span class="icon">🔍−</span>
+                    <button class="action-btn-global" data-action="decrease-font" role="menuitem">
+                        <span class="icon" aria-hidden="true">🔍−</span>
                         <span class="label">Diminuir fonte</span>
                         <span class="shortcut">D</span>
                     </button>
                     
-                    <button class="action-btn-global" data-action="reset-font">
-                        <span class="icon">🔍</span>
+                    <button class="action-btn-global" data-action="reset-font" role="menuitem">
+                        <span class="icon" aria-hidden="true">🔍</span>
                         <span class="label">Fonte padrão</span>
                         <span class="shortcut">R</span>
                     </button>
                     
-                    <div class="divider-global"></div>
+                    <div class="divider-global" role="separator"></div>
                     
-                    <button class="action-btn-global" data-action="high-contrast">
-                        <span class="icon">🌓</span>
+                    <button class="action-btn-global" data-action="high-contrast" role="menuitem">
+                        <span class="icon" aria-hidden="true">🌓</span>
                         <span class="label">Alto contraste</span>
                         <span class="shortcut">C</span>
                     </button>
                     
-                    <button class="action-btn-global" data-action="reset-all">
-                        <span class="icon">↺</span>
+                    <button class="action-btn-global" data-action="reset-all" role="menuitem">
+                        <span class="icon" aria-hidden="true">↺</span>
                         <span class="label">Restaurar tudo</span>
                         <span class="shortcut">Esc</span>
                     </button>
@@ -402,10 +537,21 @@
 
         // Insere o menu no final do body
         document.body.insertAdjacentHTML('beforeend', menuHTML);
+        log('Menu criado com sucesso');
     }
 
     // ========== INICIALIZA O MENU ==========
     function initMenu() {
+        log('Inicializando menu flutuante...');
+
+        // Verifica se o DOM está pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initMenu();
+            });
+            return;
+        }
+
         // Injeta estilos
         injectStyles();
 
@@ -419,7 +565,10 @@
         const menuContainer = document.querySelector('.floating-menu-global');
         const badge = document.getElementById('menuBadge');
 
-        if (!menuToggle || !menuActions) return;
+        if (!menuToggle || !menuActions) {
+            log('Erro: Elementos do menu não encontrados');
+            return;
+        }
 
         let menuOpen = false;
 
@@ -428,6 +577,7 @@
             body.classList.remove('font-large-global', 'font-small-global', 'high-contrast-global');
             body.style.fontSize = '';
             updateBadge('✨');
+            log('Todos os estilos resetados');
         }
 
         function increaseFont() {
@@ -435,6 +585,9 @@
             if (!body.classList.contains('font-large-global')) {
                 body.classList.add('font-large-global');
                 updateBadge('🔍+');
+                log('Fonte aumentada');
+            } else {
+                log('Fonte já está no tamanho máximo');
             }
         }
 
@@ -443,22 +596,33 @@
             if (!body.classList.contains('font-small-global')) {
                 body.classList.add('font-small-global');
                 updateBadge('🔍−');
+                log('Fonte diminuída');
+            } else {
+                log('Fonte já está no tamanho mínimo');
             }
         }
 
         function resetFont() {
             body.classList.remove('font-large-global', 'font-small-global');
             updateBadge('🔍');
+            log('Fonte resetada para o padrão');
         }
 
         function toggleHighContrast() {
             body.classList.toggle('high-contrast-global');
-            updateBadge(body.classList.contains('high-contrast-global') ? '🌓' : '✨');
+            const isActive = body.classList.contains('high-contrast-global');
+            updateBadge(isActive ? '🌓' : '✨');
+            log(`Alto contraste ${isActive ? 'ativado' : 'desativado'}`);
         }
 
         function updateBadge(text) {
             if (badge) {
                 badge.textContent = text;
+                if (text === '🌓') {
+                    badge.classList.add('active');
+                } else {
+                    badge.classList.remove('active');
+                }
             }
         }
 
@@ -477,9 +641,11 @@
             menuActions.classList.toggle('open', menuOpen);
             menuToggle.setAttribute('aria-expanded', menuOpen);
             menuToggle.style.transform = menuOpen ? 'rotate(60deg)' : 'rotate(0deg)';
+            log(`Menu ${menuOpen ? 'aberto' : 'fechado'}`);
         }
 
         // ===== EVENTOS =====
+        // Toggle do menu
         menuToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             toggleMenu();
@@ -488,6 +654,13 @@
         // Fecha ao clicar fora
         document.addEventListener('click', function(e) {
             if (menuOpen && menuContainer && !menuContainer.contains(e.target)) {
+                toggleMenu();
+            }
+        });
+
+        // Fecha ao pressionar ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && menuOpen) {
                 toggleMenu();
             }
         });
@@ -516,21 +689,16 @@
         // ===== ATALHOS DO TECLADO =====
         document.addEventListener('keydown', function(e) {
             // Ctrl+Shift+A = Abrir menu
-            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+            if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
                 e.preventDefault();
                 if (!menuOpen) toggleMenu();
                 return;
             }
 
-            // Esc = Fechar menu e restaurar
-            if (e.key === 'Escape' && menuOpen) {
-                toggleMenu();
-                return;
-            }
-
             // Atalhos apenas se o menu estiver aberto
             if (menuOpen) {
-                switch(e.key.toLowerCase()) {
+                const key = e.key.toLowerCase();
+                switch(key) {
                     case 'a':
                         e.preventDefault();
                         increaseFont();
@@ -551,6 +719,9 @@
                         toggleHighContrast();
                         if (CONFIG.autoClose) toggleMenu();
                         break;
+                    case 'escape':
+                        // Já tratado acima
+                        break;
                 }
             }
         });
@@ -562,52 +733,65 @@
                     fontLarge: body.classList.contains('font-large-global'),
                     fontSmall: body.classList.contains('font-small-global'),
                     highContrast: body.classList.contains('high-contrast-global'),
+                    timestamp: Date.now()
                 };
-                localStorage.setItem('accessibility_preferences', JSON.stringify(prefs));
+                localStorage.setItem('floating_menu_preferences', JSON.stringify(prefs));
+                log('Preferências salvas', prefs);
             } catch (e) {
-                // localStorage indisponível
+                log('Erro ao salvar preferências:', e);
             }
         }
 
         // ===== CARREGAR PREFERÊNCIAS =====
         function loadPreferences() {
-            if (!CONFIG.savePreferences) return;
+            if (!CONFIG.savePreferences) {
+                log('Salvamento de preferências desabilitado');
+                return;
+            }
 
             try {
-                const saved = localStorage.getItem('accessibility_preferences');
-                if (!saved) return;
+                const saved = localStorage.getItem('floating_menu_preferences');
+                if (!saved) {
+                    log('Nenhuma preferência salva encontrada');
+                    return;
+                }
 
                 const prefs = JSON.parse(saved);
+                log('Preferências carregadas', prefs);
                 
-                if (prefs.fontLarge) body.classList.add('font-large-global');
-                if (prefs.fontSmall) body.classList.add('font-small-global');
-                if (prefs.highContrast) body.classList.add('high-contrast-global');
-
-                // Atualiza badge
-                if (prefs.highContrast) {
-                    updateBadge('🌓');
-                } else if (prefs.fontLarge) {
+                if (prefs.fontLarge) {
+                    body.classList.add('font-large-global');
                     updateBadge('🔍+');
-                } else if (prefs.fontSmall) {
+                }
+                if (prefs.fontSmall) {
+                    body.classList.add('font-small-global');
                     updateBadge('🔍−');
-                } else {
+                }
+                if (prefs.highContrast) {
+                    body.classList.add('high-contrast-global');
+                    updateBadge('🌓');
+                }
+
+                // Se nenhuma preferência ativa, badge padrão
+                if (!prefs.fontLarge && !prefs.fontSmall && !prefs.highContrast) {
                     updateBadge('✨');
                 }
+
+                log('Preferências aplicadas com sucesso');
             } catch (e) {
-                // Erro ao carregar preferências
+                log('Erro ao carregar preferências:', e);
             }
         }
 
         // ===== INICIALIZA =====
         resetAllStyles(); // Limpa qualquer estilo residual
         loadPreferences(); // Carrega preferências salvas
+
+
+        log('Inicialização concluída');
     }
 
-    // ========== EXECUTA QUANDO O DOM ESTIVER PRONTO ==========
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMenu);
-    } else {
-        initMenu();
-    }
+    // ========== EXECUTA ==========
+    initMenu();
 
 })();
