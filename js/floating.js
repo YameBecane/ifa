@@ -1,6 +1,8 @@
 // =============================================
 // MENU FLUTUANTE DE ACESSIBILIDADE - VERSÃO GLOBAL
 // ARQUIVO: js/floating.js
+// ÍCONE: line.png
+// MENU ABRE PARA CIMA
 // =============================================
 
 (function() {
@@ -9,11 +11,13 @@
     // ========== CONFIGURAÇÕES ==========
     const CONFIG = {
         position: 'bottom-left',     // bottom-left, bottom-right, top-left, top-right
-        icon: '⚙️',                  // Ícone do botão
+        icon: 'line.png',            // Nome do arquivo do ícone
+        iconPath: 'img/',            // Caminho para a pasta do ícone
         menuTitle: 'Acessibilidade', // Título do menu
         autoClose: true,             // Fecha o menu após clicar em uma ação
         savePreferences: true,       // Salva as preferências no localStorage
         debug: false,                // Ativa logs de debug
+        menuDirection: 'up',         // 'up' ou 'down' - direção que o menu abre
     };
 
     // ========== LOG DE DEBUG ==========
@@ -30,6 +34,8 @@
         const styles = `
             /* ============================================
                MENU FLUTUANTE - ESTILOS GLOBAIS
+               ÍCONE: line.png
+               MENU ABRE PARA CIMA
                ============================================ */
 
             /* CONTAINER PRINCIPAL */
@@ -38,8 +44,8 @@
                 z-index: 9999;
                 display: flex;
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
+                align-items: center;
+                gap: 0px;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
                 animation: floatingMenuSlideUp 0.3s ease-out;
             }
@@ -48,6 +54,7 @@
             .floating-menu-global.bottom-left {
                 bottom: 28px;
                 left: 28px;
+                align-items: flex-start;
             }
             .floating-menu-global.bottom-right {
                 bottom: 28px;
@@ -57,6 +64,7 @@
             .floating-menu-global.top-left {
                 top: 28px;
                 left: 28px;
+                align-items: flex-start;
             }
             .floating-menu-global.top-right {
                 top: 28px;
@@ -64,32 +72,48 @@
                 align-items: flex-end;
             }
 
-            /* BOTÃO TOGGLE */
+            /* ===== MENU ABRE PARA CIMA (PADRÃO) ===== */
+            .floating-menu-global .menu-actions-global {
+                order: -1; /* Coloca o menu ANTES do botão */
+                margin-bottom: 12px;
+            }
+
+            /* ===== BOTÃO TOGGLE COM ÍCONE PNG ===== */
             .menu-toggle-global {
                 background: #1e293b;
                 color: white;
                 border: none;
-                width: 58px;
-                height: 58px;
+                width: 60px;
+                height: 60px;
                 border-radius: 50%;
-                font-size: 28px;
                 cursor: pointer;
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-                border: 2px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border: 2px solid rgba(255, 255, 255, 0.15);
                 position: relative;
                 user-select: none;
                 -webkit-tap-highlight-color: transparent;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            .menu-toggle-global img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                display: block;
+                filter: brightness(0) invert(1);
+                transition: transform 0.3s ease;
             }
 
             .menu-toggle-global:hover {
                 background: #0f172a;
                 transform: scale(1.05);
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-                border-color: rgba(255, 255, 255, 0.2);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+                border-color: rgba(255, 255, 255, 0.3);
             }
 
             .menu-toggle-global:active {
@@ -112,6 +136,7 @@
                 font-weight: bold;
                 box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
                 transition: all 0.3s ease;
+                z-index: 10;
             }
 
             .menu-toggle-global .badge.active {
@@ -119,49 +144,71 @@
                 animation: badgePulse 1.5s ease-in-out infinite;
             }
 
-            /* CONTAINER DOS BOTÕES */
+            /* ===== CONTAINER DOS BOTÕES (ABRE PARA CIMA) ===== */
             .menu-actions-global {
                 display: flex;
                 flex-direction: column;
                 gap: 6px;
-                background: rgba(255, 255, 255, 0.95);
+                background: rgba(255, 255, 255, 0.96);
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
-                padding: 12px 10px;
-                border-radius: 20px;
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+                padding: 0 10px;
+                border-radius: 16px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
                 border: 1px solid rgba(255, 255, 255, 0.4);
-                min-width: 190px;
-                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-                transform-origin: bottom left;
+                min-width: 200px;
+                transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform-origin: bottom center;
                 opacity: 0;
                 pointer-events: none;
-                transform: scale(0.85) translateY(16px);
+                transform: scale(0.85) translateY(20px);
                 max-height: 0;
                 overflow: hidden;
                 padding: 0 10px;
+                margin-bottom: 0;
             }
 
-            .floating-menu-global.bottom-right .menu-actions-global {
-                transform-origin: bottom right;
-            }
-            .floating-menu-global.top-left .menu-actions-global {
-                transform-origin: top left;
-            }
-            .floating-menu-global.top-right .menu-actions-global {
-                transform-origin: top right;
-            }
-
+            /* Quando o menu está aberto */
             .menu-actions-global.open {
                 opacity: 1;
                 pointer-events: auto;
                 transform: scale(1) translateY(0);
-                max-height: 500px;
+                max-height: 600px;
                 padding: 12px 10px;
                 overflow: visible;
+                margin-bottom: 12px;
             }
 
-            /* TÍTULO DO MENU */
+            /* Ajuste para posição bottom-right */
+            .floating-menu-global.bottom-right .menu-actions-global {
+                transform-origin: bottom right;
+            }
+
+            /* Ajuste para posição top-left */
+            .floating-menu-global.top-left .menu-actions-global {
+                transform-origin: top left;
+                order: 1; /* Menu fica ABAIXO do botão */
+                margin-bottom: 0;
+                margin-top: 12px;
+            }
+
+            .floating-menu-global.top-left .menu-actions-global.open {
+                transform-origin: top left;
+            }
+
+            /* Ajuste para posição top-right */
+            .floating-menu-global.top-right .menu-actions-global {
+                transform-origin: top right;
+                order: 1;
+                margin-bottom: 0;
+                margin-top: 12px;
+            }
+
+            .floating-menu-global.top-right .menu-actions-global.open {
+                transform-origin: top right;
+            }
+
+            /* ===== TÍTULO DO MENU ===== */
             .menu-title-global {
                 font-size: 0.7rem;
                 text-transform: uppercase;
@@ -171,13 +218,14 @@
                 border-bottom: 1px solid rgba(0, 0, 0, 0.06);
                 margin-bottom: 4px;
                 font-weight: 600;
+                text-align: center;
             }
 
-            /* BOTÕES DE AÇÃO */
+            /* ===== BOTÕES DE AÇÃO ===== */
             .action-btn-global {
                 background: transparent;
                 border: none;
-                padding: 9px 12px;
+                padding: 9px 14px;
                 border-radius: 12px;
                 font-size: 0.9rem;
                 font-weight: 500;
@@ -234,6 +282,49 @@
                 margin: 4px 0 6px;
             }
 
+            /* ===== SETA INDICADORA ===== */
+            .menu-actions-global::after {
+                content: '';
+                position: absolute;
+                bottom: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 8px solid rgba(255, 255, 255, 0.96);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .menu-actions-global.open::after {
+                opacity: 1;
+            }
+
+            /* Ajuste para bottom-right */
+            .floating-menu-global.bottom-right .menu-actions-global::after {
+                left: auto;
+                right: 20px;
+            }
+
+            /* Ajuste para top-left (seta aponta para baixo) */
+            .floating-menu-global.top-left .menu-actions-global::after {
+                top: -8px;
+                bottom: auto;
+                border-top: none;
+                border-bottom: 8px solid rgba(255, 255, 255, 0.96);
+            }
+
+            .floating-menu-global.top-right .menu-actions-global::after {
+                top: -8px;
+                bottom: auto;
+                left: auto;
+                right: 20px;
+                border-top: none;
+                border-bottom: 8px solid rgba(255, 255, 255, 0.96);
+            }
+
             /* ===== ANIMAÇÕES ===== */
             @keyframes floatingMenuSlideUp {
                 from {
@@ -248,7 +339,7 @@
 
             @keyframes badgePulse {
                 0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
+                50% { transform: scale(1.15); }
             }
 
             /* ===== MODO ALTO CONTRASTE ===== */
@@ -292,8 +383,11 @@
 
             body.high-contrast-global .menu-toggle-global {
                 background: #e8edf5 !important;
-                color: #0b0d10 !important;
                 border-color: #9aaec9 !important;
+            }
+
+            body.high-contrast-global .menu-toggle-global img {
+                filter: none !important;
             }
 
             body.high-contrast-global .menu-toggle-global:hover {
@@ -303,6 +397,10 @@
             body.high-contrast-global .menu-actions-global {
                 background: rgba(22, 27, 34, 0.96) !important;
                 border-color: #3d4b5e !important;
+            }
+
+            body.high-contrast-global .menu-actions-global::after {
+                border-top-color: rgba(22, 27, 34, 0.96) !important;
             }
 
             body.high-contrast-global .action-btn-global {
@@ -392,11 +490,14 @@
                 .menu-toggle-global {
                     width: 54px !important;
                     height: 54px !important;
-                    font-size: 24px !important;
+                }
+                .menu-toggle-global img {
+                    width: 28px !important;
+                    height: 28px !important;
                 }
                 .menu-actions-global {
-                    min-width: 170px !important;
-                    padding: 10px 8px !important;
+                    min-width: 180px !important;
+                    padding: 0 8px !important;
                 }
                 .menu-actions-global.open {
                     padding: 10px 8px !important;
@@ -421,7 +522,10 @@
                 .menu-toggle-global {
                     width: 48px !important;
                     height: 48px !important;
-                    font-size: 20px !important;
+                }
+                .menu-toggle-global img {
+                    width: 24px !important;
+                    height: 24px !important;
                 }
                 .menu-toggle-global .badge {
                     width: 18px !important;
@@ -431,9 +535,9 @@
                     right: -2px !important;
                 }
                 .menu-actions-global {
-                    min-width: 150px !important;
-                    padding: 8px 6px !important;
-                    border-radius: 16px !important;
+                    min-width: 160px !important;
+                    padding: 0 6px !important;
+                    border-radius: 14px !important;
                 }
                 .menu-actions-global.open {
                     padding: 8px 6px !important;
@@ -456,18 +560,6 @@
                     padding: 2px 6px 6px 6px !important;
                 }
             }
-
-            /* ===== SCROLLBAR PERSONALIZADA (opcional) ===== */
-            .menu-actions-global::-webkit-scrollbar {
-                width: 4px;
-            }
-            .menu-actions-global::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            .menu-actions-global::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
-                border-radius: 10px;
-            }
         `;
 
         const styleSheet = document.createElement('style');
@@ -486,17 +578,14 @@
             return;
         }
 
-        log('Criando menu...');
+        log('Criando menu com ícone line.png...');
+
+        // Caminho completo do ícone
+        const iconFullPath = CONFIG.iconPath + CONFIG.icon;
 
         const menuHTML = `
             <div class="floating-menu-global ${CONFIG.position}" role="navigation" aria-label="Menu de acessibilidade">
-                <button class="menu-toggle-global" id="menuToggleGlobal" 
-                        aria-label="Menu de acessibilidade" 
-                        aria-expanded="false"
-                        title="Menu de acessibilidade (Ctrl+Shift+A)">
-                    ${CONFIG.icon}
-                    <span class="badge" id="menuBadge" aria-hidden="true">✨</span>
-                </button>
+                <!-- MENU (ABRE PARA CIMA) -->
                 <div class="menu-actions-global" id="menuActionsGlobal" role="menu">
                     <div class="menu-title-global" aria-hidden="true">${CONFIG.menuTitle}</div>
                     
@@ -532,6 +621,15 @@
                         <span class="shortcut">Esc</span>
                     </button>
                 </div>
+
+                <!-- BOTÃO COM ÍCONE PNG -->
+                <button class="menu-toggle-global" id="menuToggleGlobal" 
+                        aria-label="Menu de acessibilidade" 
+                        aria-expanded="false"
+                        title="Menu de acessibilidade (Ctrl+Shift+A)">
+                    <img src="${iconFullPath}" alt="Ícone de acessibilidade" id="menuIcon">
+                    <span class="badge" id="menuBadge" aria-hidden="true">✨</span>
+                </button>
             </div>
         `;
 
@@ -564,6 +662,7 @@
         const menuActions = document.getElementById('menuActionsGlobal');
         const menuContainer = document.querySelector('.floating-menu-global');
         const badge = document.getElementById('menuBadge');
+        const menuIcon = document.getElementById('menuIcon');
 
         if (!menuToggle || !menuActions) {
             log('Erro: Elementos do menu não encontrados');
@@ -640,7 +739,12 @@
             menuOpen = !menuOpen;
             menuActions.classList.toggle('open', menuOpen);
             menuToggle.setAttribute('aria-expanded', menuOpen);
-            menuToggle.style.transform = menuOpen ? 'rotate(60deg)' : 'rotate(0deg)';
+            
+            // Rotação do ícone quando abre
+            if (menuIcon) {
+                menuIcon.style.transform = menuOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+            
             log(`Menu ${menuOpen ? 'aberto' : 'fechado'}`);
         }
 
@@ -719,9 +823,6 @@
                         toggleHighContrast();
                         if (CONFIG.autoClose) toggleMenu();
                         break;
-                    case 'escape':
-                        // Já tratado acima
-                        break;
                 }
             }
         });
@@ -787,8 +888,7 @@
         resetAllStyles(); // Limpa qualquer estilo residual
         loadPreferences(); // Carrega preferências salvas
 
-
-        log('Inicialização concluída');
+        
     }
 
     // ========== EXECUTA ==========
